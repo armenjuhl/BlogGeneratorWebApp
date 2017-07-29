@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if entry|length == 0 %}
+    <p>No entries yet</p>
+    {% else %}
+    pass
+    {% endif %}
+
+    <h2>Build a Blog</h2>
+    <ul>
+        {% for posts in submitted_blogs %}
+       <p><u>Blog Title: {{posts.title}}</u>
+        <p>{{posts.body}}</p>
+       
+        {% endfor %}
+    </ul>
+
+{% endblock %}
