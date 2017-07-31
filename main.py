@@ -17,6 +17,7 @@ class Blog(db.Model):
     body = db.Column(db.String(120))
     submitted = db.Column(db.Boolean)
 
+
     def __init__(self, title, body, submitted=True):
         self.title = title
         self.body = body
@@ -36,24 +37,40 @@ def show_posts():
     title = ''
     body = ''
     if request.method == 'GET':
-   
         submitted_blogs = Blog.query.all()
         return render_template('blog.html', submitted_blogs=submitted_blogs, title=title, body=body)
 
-
+@app.route('/landing', methods =['GET'])
+def show_blog():
+    blog_id = request.args.get('id')
+    blog = Blog.query.get(blog_id)
+    return render_template('landing.html', blog=blog)
+    
 @app.route('/newpost', methods=['POST', 'GET'])
 def new_post():
     title = ''
     body = ''
-    if request.method == 'POST':
+    error_title = ''
+    error_body = ''
+    if request.method == 'POST':    
         title = request.form['title']
         body = request.form['body']
-        submitted= True
-        newpost = Blog(title=title, body=body, submitted=True)
-        db.session.add(newpost)
-        db.session.commit()
-        blog=newpost.id
-        return redirect('/blog?id={0}'.format(blog))
+        
+        if len(title) < 1:
+            error_title = 'title must be longer than 1 character'
+        if len(body) < 1:
+            error_body = 'body must be longer than 1 character'
+        if len(title) < 1 or len(body) < 1:
+            return render_template('newpost.html', error_body=error_body, error_title=error_title)
+
+
+        else:
+            submitted= True
+            newpost = Blog(title=title, body=body, submitted=True)
+            db.session.add(newpost)
+            db.session.commit()
+            blog=newpost.id
+            return redirect('/blog?id={0}'.format(blog))
     else:
         return render_template('newpost.html', title='title', body='body')
 

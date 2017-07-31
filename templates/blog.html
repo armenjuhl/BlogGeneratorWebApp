@@ -11,8 +11,8 @@
     <h2>Build a Blog</h2>
     <ul>
         {% for posts in submitted_blogs %}
-       <p><u>Blog Title: {{posts.title}}</u>
-        <p>{{posts.body}}</p>
+       <p><u> <a href="/landing?id={{posts.id}}"> Blog Title: {{posts.title}}</a></u>
+        <p>Blog Body: {{posts.body}}</p>
        
         {% endfor %}
     </ul>
